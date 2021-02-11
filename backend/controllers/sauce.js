@@ -109,9 +109,9 @@ exports.likeAndDislike = (req, res, next) => {
        .catch(err=>{res.status(400).json({error:err});
      });
   
-  // L'utilisateur supprime like et dislike  
+  // L'utilisateur supprime like ou dislike  
    }else if (likeSauce === 0 ){
-     // Trouver l'id  de la sauce unique envoyée par l'utilisateur
+     // Trouver l'id de la sauce unique envoyée par l'utilisateur
      Sauce.findOne({_id: sauceId})
        .then((sauce) => {
          // Vérifie si le tableau contient une valeur  
@@ -132,7 +132,6 @@ exports.likeAndDislike = (req, res, next) => {
             .then(() => res.status(200).json({ message: 'Un dislike retiré'}))
             .catch(error => res.status(400).json({ error }));
            }
-         
        })
 
        .catch(error => res.status(400).json({ error }));
