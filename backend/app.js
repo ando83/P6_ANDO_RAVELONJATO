@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 // Importer mongoose pour l'utilisation de la base de donnée
 const mongoose = require('mongoose');
-//nouvelle importation de node, donne accès au système de fichier
+//Donne accès au système de fichier
 const path = require('path');
 // Importer le router pour les sauces
 const sauceRoutes = require('./routes/sauce');
@@ -12,22 +12,22 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 // Importer module helmet d'express, sécuriser l'application en configurant divers en-têtes HTTP
 const helmet = require('helmet');
-// Importer dotenv,variables d'environnement pour stocker les mdp, informations d'authentification dans le fichier .env
+// Importer dotenv,variables d'environnement pour stocker des informations sensibles(exemple: mot de passe) dans le fichier .env(en production on mettra dans .gitignore)
 require('dotenv').config();
 
-//méthode pour se connecter à MongoDB
+//Méthode pour se connecter à MongoDB
 mongoose.connect('mongodb+srv://'+process.env.USER_MONGOOSE+':'+process.env.PSW_MONGOOSE+'@cluster0.3onvn.mongodb.net/test?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// appliquer la méthode express
+// Appliquer la méthode express
 const app = express();
 // Appliquer helmet
 app.use(helmet());
 
-// fonction(middleware) qui autorise à accéder aux ressources(api)
+// Fonction(middleware) qui autorise à accéder aux ressources(api)
 app.use((req, res, next) => {
     // rajoute header sur l'objet réponse
     res.setHeader('Access-Control-Allow-Origin', '*'); //accessible pour toute origine 

@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 // Récupérer le model User car on va enregistrer et lire des user dans cette fonction (schéma de mongoose)
 const User = require('../models/User');
+
+
 // Fonction pour la création de nouveau utilisateur(user) dans la base de donnée à partir de la connection d'inscription de l'application front-end
 exports.signup = (req, res, next) => {
     // Appel de la fonction hachage de bcrypt pour crypter un mot de passe, on lui passe le mot de passe du corps de la requête du front-end et le nombre de fois qu'on exécute l'agorithme de hachage
@@ -37,9 +39,9 @@ exports.login = (req, res, next) => {
             }
             res.status(200).json({
               userId: user._id,
-              token: jwt.sign( // fonction sign prend des arguments, vérifie l'authentification de l'utilisateur, on a une clé secrète pour sécuriser l'encodage et la durée de validité du token(24h) 
+              token: jwt.sign( // fonction sign prend des arguments, vérifie l'authentification de l'utilisateur, on a une clef secrète pour sécuriser l'encodage et la durée de validité du token(24h) 
                 { userId: user._id },
-                'RANDOM_TOKEN_SECRET', // à modifié
+                process.env.JWT_SECRET_KEY, // à modifié
                 { expiresIn: '24h' }
               )
             });
