@@ -10,14 +10,21 @@ const path = require('path');
 const sauceRoutes = require('./routes/sauce');
 // Importer le router pour les utilisateurs
 const userRoutes = require('./routes/user');
+// Importer module helmet d'express, sécuriser l'application en configurant divers en-têtes HTTP
+const helmet = require('helmet');
+
 //méthode pour se connecter à MongoDB
 mongoose.connect('mongodb+srv://andoravel1:evirananat00@cluster0.3onvn.mongodb.net/test?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
 // appliquer la méthode express
 const app = express();
+// Appliquer helmet
+app.use(helmet());
+
 // fonction(middleware) qui autorise à accéder aux ressources(api)
 app.use((req, res, next) => {
     // rajoute header sur l'objet réponse
