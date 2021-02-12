@@ -37,7 +37,7 @@ exports.login = (req, res, next) => {
             }
             res.status(200).json({
               userId: user._id,
-              token: jwt.sign( // fonction sign prend des arguments, vérifier l'authentifiation de l'utilisateur, clé secrète pour sécuriser l'encodage et la durée de validité du token(24h) 
+              token: jwt.sign( // fonction sign prend des arguments, vérifie l'authentification de l'utilisateur, on a une clé secrète pour sécuriser l'encodage et la durée de validité du token(24h) 
                 { userId: user._id },
                 'RANDOM_TOKEN_SECRET', // à modifié
                 { expiresIn: '24h' }
