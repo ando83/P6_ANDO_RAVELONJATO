@@ -12,9 +12,11 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 // Importer module helmet d'express, sécuriser l'application en configurant divers en-têtes HTTP
 const helmet = require('helmet');
+// Importer dotenv,variables d'environnement pour stocker les mdp, informations d'authentification dans le fichier .env
+require('dotenv').config();
 
 //méthode pour se connecter à MongoDB
-mongoose.connect('mongodb+srv://andoravel1:evirananat00@cluster0.3onvn.mongodb.net/test?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://'+process.env.USER_MONGOOSE+':'+process.env.PSW_MONGOOSE+'@cluster0.3onvn.mongodb.net/test?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
