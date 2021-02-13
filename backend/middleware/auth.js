@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
   try {
     // Récupérer le token dans le header autorisation, avec la fonction split on récupère le deuxième élément du tableau
     const token = req.headers.authorization.split(' ')[1];
-    // Décoder le token en utlisant le package jwt et la fonction verify + clé secrète
+    // Décoder le token en utlisant le package jwt et la fonction verify + clef secrète
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
     // Récupérer userId
     const userId = decodedToken.userId;
