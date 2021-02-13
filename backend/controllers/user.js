@@ -6,10 +6,26 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 // Récupérer le model User car on va enregistrer et lire des user dans cette fonction (schéma de mongoose)
 const User = require('../models/User');
+// dotenv
+require('dotenv').config();
 
+// Validateur de mot de passe 
+const passwordValidator = require('password-validator');
+// Schéma
+const schema = new passwordValidator();
+// Les propriétés acceptés
+schema
+.is().min(5)                                    
+.is().max(50)                                                                                         
+.has().not().spaces()  
 
+console.log(schema.validate(' validPASS123 ' )); // true
+console.log(schema.validate('NONV')); // false
 // Fonction pour la création de nouveau utilisateur(user) dans la base de donnée à partir de la connection d'inscription de l'application front-end
 exports.signup = (req, res, next) => {
+  if(!schema.validate(req.body.password)){ // Si le mot de passe n'est pas conforme au schéma
+    throw 'mot de passe non valide !';
+  }else if(schema.validate(req.body.password)){ // Sinon
     // Appel de la fonction hachage de bcrypt pour crypter un mot de passe, on lui passe le mot de passe du corps de la requête du front-end et le nombre de fois qu'on exécute l'agorithme de hachage
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
@@ -23,6 +39,7 @@ exports.signup = (req, res, next) => {
           .catch(error => res.status(400).json({ error }));
       })
       .catch(error => res.status(500).json({ error }));
+    }
   };
 // Fonction pour connecter l'utilisateur existant
 exports.login = (req, res, next) => {
@@ -41,7 +58,7 @@ exports.login = (req, res, next) => {
               userId: user._id,
               token: jwt.sign( // fonction sign prend des arguments, vérifie l'authentification de l'utilisateur, on a une clef secrète pour sécuriser l'encodage et la durée de validité du token(24h) 
                 { userId: user._id },
-                process.env.JWT_SECRET_KEY, // à modifié
+                process.env.JWT_SECRET_KEY, 
                 { expiresIn: '24h' }
               )
             });
