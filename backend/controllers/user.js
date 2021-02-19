@@ -15,18 +15,20 @@ const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
 // Les propriétés acceptés
 schema
-.is().min(5)                                    
-.is().max(50)                                                                                         
+.is().min(6)                                    
+.is().max(50)  
+.has().digits(1)                                                                                        
 .has().not().spaces()  
 
-console.log(schema.validate(' validPASS123 ' )); // true
-console.log(schema.validate('NONV')); // false
 // Fonction pour la création de nouveau utilisateur(user) dans la base de donnée à partir de la connection d'inscription de l'application front-end
 exports.signup = (req, res, next) => {
   if(!schema.validate(req.body.password)){ // Si le mot de passe n'est pas conforme au schéma
-    throw 'mot de passe non valide !';
+    let code = 400;
+    let message = "Le Mot de passe doit contenir au minimum 6 caractères, sans-espaces et doit avoir au moins 1 chiffre";
+    res.writeHead(code, message, {'content-type': 'application/json'});
+    res.end(message);
   }else if(schema.validate(req.body.password)){ // Sinon
-    // Appel de la fonction hachage de bcrypt pour crypter un mot de passe, on lui passe le mot de passe du corps de la requête du front-end et le nombre de fois qu'on exécute l'agorithme de hachage
+    // Appel de la fonction hachage de bcrypt pour crypter un mot de passe, on lui passe le mot de passe du corps de la requête du front-end et le nombre de fois qu'on exécute 
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         // Nouvel utilisateur avec le modèle de mongoose  
